@@ -2,6 +2,7 @@ import {
   CampaignRepository,
   Campaign,
 } from "../infrastructure/campaignRepository";
+import { v4 as uuidv4 } from "uuid";
 
 export interface CreateCampaignInput {
   name: string;
@@ -20,7 +21,10 @@ export class CampaignService {
   private repo = new CampaignRepository();
 
   async createCampaign(data: CreateCampaignInput): Promise<Campaign> {
-    return this.repo.create(data);
+    const createdAt = new Date().toISOString();
+    const id = uuidv4();
+    const campaign = { ...data, id, createdAt };
+    return this.repo.create(campaign);
   }
 
   async getCampaignById(id: string): Promise<Campaign | null> {

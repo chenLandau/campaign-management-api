@@ -1,13 +1,5 @@
 import Joi from "joi";
 
-export const createCampaignSchema = Joi.object({
-  name: Joi.string().required(),
-  publisherId: Joi.string().required(),
-  status: Joi.string().valid("active", "paused", "ended").default("active"),
-  startDate: Joi.string().required(),
-});
-
-// Schema for updating a campaign (PATCH)
 export const updateCampaignSchema = Joi.object({
   name: Joi.string().optional(),
   status: Joi.string().valid("active", "paused", "ended").optional().messages({
@@ -18,7 +10,6 @@ export const updateCampaignSchema = Joi.object({
   }),
 });
 
-// Full campaign schema (for reference/validation of complete objects)
 export const campaignSchema = Joi.object({
   id: Joi.string().uuid().required(),
   name: Joi.string().required(),

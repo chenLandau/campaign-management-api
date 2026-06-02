@@ -18,7 +18,7 @@ export class CampaignRepository {
   private readonly indexes = ["id", "publisherId"];
 
   constructor() {
-    const mongooseSchema = new Schema({}, { strict: false, timestamps: true });
+    const mongooseSchema = new Schema({}, { strict: false });
 
     this.indexes.forEach((field) => {
       mongooseSchema.index({ [field]: 1 });
@@ -46,7 +46,7 @@ export class CampaignRepository {
 
   async create(data: any): Promise<Campaign> {
     const validatedData = this.validate(data);
-    const doc = await this.model.create(validatedData as any);
+    const doc = await this.model.create(validatedData);
     return doc.toObject();
   }
 
@@ -55,8 +55,7 @@ export class CampaignRepository {
   }
 
   async findById(id: string): Promise<Campaign | null> {
-    if (!mongoose.Types.ObjectId.isValid(id)) return null;
-    return this.model.findById(id).lean();
+    return this.model.findById(id);
   }
 
   async update(id: string, data: any): Promise<Campaign | null> {
