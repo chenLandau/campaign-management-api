@@ -12,14 +12,10 @@ app.use(express.json());
 app.use(requestLogger);
 app.use(`/campaigns`, router);
 
-app.get("/", (_req: Request, res: Response) => {
-  res.json({
-    message: "Hello World",
-  });
-});
-
 initPackages().then(() => {
   app.listen(PORT, () => {
     console.log(`Server running on ${PORT}`);
   });
 });
+
+export default app;

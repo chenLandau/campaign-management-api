@@ -3,10 +3,19 @@ import { CampaignService } from "./campaignService";
 import { HttpStatus } from "../../../common/statuses/networkStatuses";
 const router = Router();
 
-async function createCampaign(req: Request, res: Response) {
-  const campaignService = new CampaignService();
-  const campaign = await campaignService.createCampaign(req.body);
-  res.status(HttpStatus.CREATED).json(campaign);
+export async function createCampaign(req: Request, res: Response) {
+  try {
+    const campaignService = new CampaignService();
+    const campaign = await campaignService.createCampaign(req.body);
+    return res.status(HttpStatus.CREATED).json(campaign);
+  } catch (error: any) {
+    if (error.message.includes("Validation Error")) {
+      return res.status(HttpStatus.BAD_REQUEST).json({ error: error.message });
+    }
+    return res
+      .status(HttpStatus.INTERNAL_SERVER_ERROR)
+      .json({ error: "Internal Server Error" });
+  }
 }
 
 async function getCampaignById(req: Request, res: Response) {
