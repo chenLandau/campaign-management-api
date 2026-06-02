@@ -1,4 +1,4 @@
-import { campaignSchema } from "./campaignScheme";
+import { campaignSchema } from "./campaignSchema";
 import mongoose, { Schema, Model } from "mongoose";
 import { ObjectSchema } from "joi";
 
@@ -74,7 +74,7 @@ export class CampaignRepository {
 
     const updatedData = {
       ...existingCampaign,
-      ...data, //
+      ...data,
     };
 
     const { error, value } = this.scheme.validate(updatedData, {

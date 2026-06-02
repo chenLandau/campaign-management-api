@@ -6,8 +6,6 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-
-    // 👇 תוסיפי את השורה הזו כאן! 👇
     "types": ["jest", "node"]
   },
   "include": ["src/**/*"]

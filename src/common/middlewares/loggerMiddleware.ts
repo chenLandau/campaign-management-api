@@ -1,4 +1,3 @@
-// src/middlewares/logger.middleware.ts
 import { Request, Response, NextFunction } from "express";
 import { logger } from "../logger/logger";
 
