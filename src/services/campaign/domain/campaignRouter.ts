@@ -32,10 +32,10 @@ async function getCampaignById(req: Request, res: Response) {
   res.status(HttpStatus.OK).json(campaign);
 }
 
-async function listCampaigns(req: Request, res: Response) {
+async function getCampaignsList(req: Request, res: Response) {
   const publisherId = (req.query.publisherId as string) || undefined;
   const campaignService = new CampaignService();
-  const campaigns = await campaignService.listCampaigns(publisherId);
+  const campaigns = await campaignService.getCampaigns(publisherId);
 
   res.status(HttpStatus.OK).json(campaigns);
 }
@@ -70,7 +70,7 @@ async function deleteCampaign(req: Request, res: Response) {
 
 router.post("/", createCampaign);
 router.get("/:id", getCampaignById);
-router.get("/", listCampaigns);
+router.get("/", getCampaignsList);
 router.patch("/:id", updateCampaign);
 router.delete("/:id", deleteCampaign);
 

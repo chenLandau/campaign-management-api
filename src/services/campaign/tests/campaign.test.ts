@@ -1,8 +1,18 @@
 import request from "supertest";
 import { app } from "../../../app";
+import { initPackages } from "../../../common/init";
+import mongoose from "mongoose";
 
 describe("Campaign Management API Tests", () => {
   let createdCampaignId: string;
+
+  beforeAll(async () => {
+    await initPackages();
+  });
+
+  afterAll(async () => {
+    await mongoose.connection.close();
+  });
 
   it("POST /campaigns - should create a new campaign", async () => {
     const res = await request(app).post("/campaigns").send({

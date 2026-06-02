@@ -48,7 +48,7 @@ export class CampaignService {
     }
   }
 
-  async listCampaigns(publisherId?: string): Promise<Campaign[]> {
+  async getCampaigns(publisherId?: string): Promise<Campaign[]> {
     try {
       const result = publisherId
         ? await this.repo.find({ publisherId })
