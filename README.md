@@ -58,3 +58,9 @@ npm run dev
 npm run build
 npm start
 ```
+
+### 5. Running tests
+
+```bash
+npm test
+```
