@@ -36,32 +36,89 @@ export class CampaignService {
   }
 
   async getCampaignById(id: string): Promise<Campaign | null> {
-    return this.repo.findById(id);
+    try {
+      const result = await this.repo.findById(id);
+      if (!result) {
+        logger.warn("Campaign not found", { campaignId: id });
+      }
+      return result;
+    } catch (error) {
+      logger.error("Failed to get campaign by ID", { campaignId: id, error });
+      throw error;
+    }
   }
 
   async listCampaigns(publisherId?: string): Promise<Campaign[]> {
-    if (publisherId) {
-      return this.repo.find({ publisherId });
+    try {
+      const result = publisherId
+        ? await this.repo.find({ publisherId })
+        : await this.repo.find();
+      logger.info("Campaigns listed successfully", {
+        count: result.length,
+        publisherId,
+      });
+      return result;
+    } catch (error) {
+      logger.error("Failed to list campaigns", { publisherId, error });
+      throw error;
     }
-
-    return this.repo.find();
   }
 
   async updateCampaign(
     id: string,
     data: UpdateCampaignInput,
   ): Promise<Campaign | null> {
-    return this.repo.update(id, data);
+    try {
+      const result = await this.repo.update(id, data);
+      if (!result) {
+        logger.warn("Campaign not found for update", { campaignId: id });
+      } else {
+        logger.info("Campaign updated successfully", { campaignId: id });
+      }
+      return result;
+    } catch (error) {
+      logger.error("Failed to update campaign", { campaignId: id, error });
+      throw error;
+    }
   }
 
   async patchCampaignStatus(
     id: string,
     status: Campaign["status"],
   ): Promise<Campaign | null> {
-    return this.repo.update(id, { status });
+    try {
+      const result = await this.repo.update(id, { status });
+      if (!result) {
+        logger.warn("Campaign not found for patch", { campaignId: id });
+      } else {
+        logger.info("Campaign status patched successfully", {
+          campaignId: id,
+          status,
+        });
+      }
+      return result;
+    } catch (error) {
+      logger.error("Failed to patch campaign status", {
+        campaignId: id,
+        status,
+        error,
+      });
+      throw error;
+    }
   }
 
   async deleteCampaign(id: string): Promise<boolean> {
-    return this.repo.delete(id);
+    try {
+      const result = await this.repo.delete(id);
+      if (result) {
+        logger.info("Campaign deleted successfully", { campaignId: id });
+      } else {
+        logger.warn("Campaign not found for deletion", { campaignId: id });
+      }
+      return result;
+    } catch (error) {
+      logger.error("Failed to delete campaign", { campaignId: id, error });
+      throw error;
+    }
   }
 }
