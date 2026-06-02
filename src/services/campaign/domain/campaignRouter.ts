@@ -1,5 +1,5 @@
 ﻿import { Router, Request, Response } from "express";
-import { CampaignService } from "../domain/campaignService";
+import { CampaignService } from "./campaignService";
 
 const router = Router();
 const prefix = "campaigns";
@@ -57,4 +57,3 @@ router.patch("/:id", updateCampaign);
 router.delete("/:id", deleteCampaign);
 
 export default router;
-export { prefix };

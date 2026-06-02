@@ -1,16 +1,14 @@
 ﻿import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import { initPackages } from "./common/init";
-import router, {
-  prefix,
-} from "./services/campaign/infrastructure/campaignRouter";
+import router from "./services/campaign/domain/campaignRouter";
 
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use(`/${prefix}`, router);
+app.use(`/campaigns`, router);
 
 app.get("/", (_req: Request, res: Response) => {
   res.json({
