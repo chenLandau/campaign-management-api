@@ -18,7 +18,14 @@ export class CampaignRepository {
   private readonly indexes = ["id", "publisherId"];
 
   constructor() {
-    const mongooseSchema = new Schema({}, { strict: false });
+    const mongooseSchema = new Schema(
+      {
+        id: { type: String, required: true },
+        publisherId: { type: String, required: true },
+        name: { type: String, required: true },
+      },
+      { strict: false },
+    );
 
     this.indexes.forEach((field) => {
       mongooseSchema.index({ [field]: 1 });
@@ -55,15 +62,24 @@ export class CampaignRepository {
   }
 
   async findById(id: string): Promise<Campaign | null> {
-    return this.model.findById(id);
+    return this.model.findOne({ id }).lean();
   }
 
   async update(id: string, data: any): Promise<Campaign | null> {
-    if (!mongoose.Types.ObjectId.isValid(id)) return null;
+    const existingCampaign = await this.model.findOne({ id }).lean();
 
-    const { error, value } = this.scheme
-      .fork(Object.keys(data), (schema) => schema.required())
-      .validate(data, { stripUnknown: true });
+    if (!existingCampaign) {
+      return null;
+    }
+
+    const updatedData = {
+      ...existingCampaign,
+      ...data, //
+    };
+
+    const { error, value } = this.scheme.validate(updatedData, {
+      stripUnknown: true,
+    });
 
     if (error) {
       throw new Error(
@@ -71,12 +87,13 @@ export class CampaignRepository {
       );
     }
 
-    return this.model.findByIdAndUpdate(id, value, { new: true }).lean();
+    return this.model
+      .findOneAndUpdate({ id }, { $set: value }, { new: true })
+      .lean();
   }
 
   async delete(id: string): Promise<boolean> {
-    if (!mongoose.Types.ObjectId.isValid(id)) return false;
-    const result = await this.model.findByIdAndDelete(id);
+    const result = await this.model.findOneAndDelete({ id });
     return result !== null;
   }
 }
